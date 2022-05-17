@@ -9,6 +9,7 @@
             {% if post.author == current_user %}
             <div>
                 <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
+                <a class="btn btn-primary btn-sm mt-1 mb-1" href="{{ url_for('create_comment', post_id=post.id) }}">Post Comment</a>
                 <button type="button" class="btn btn-success btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
             </div>
             {% endif %}
@@ -37,4 +38,13 @@
         </div>
         </div>
     </div>
+    {% for comment in post.comments %}
+    <article class="media content-section">
+        <div class="media-body">
+          <h2 class="article-title">{{ comment.date_posted.strftime('%Y-%m-%d') }}</h2>
+          <p class="article-content">{{ comment.content }}</p>
+          <p class="article-content">{{ comment.user.username }}</p>
+        </div>
+    </article>
+    {% endfor %}
 {% endblock content %}

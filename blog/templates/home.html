@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content%}
-    {% for post in posts %}
+{% for post in posts %}
       <article class="media content-section">
         <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
         <div class="media-body">
@@ -13,4 +13,12 @@
         </div>
       </article>
     {% endfor %}
+    <div class="card text-dark bg-warning mb-3">
+      <div class="card-header">Quote of the day</div>
+       <div class="card-body">
+         <h5 class="card-title">{{quote.author}}</h5>
+         <p class="card-text">{{quote.quote}}</p>
+       </div>
+    </div>
+    
 {% endblock content %}

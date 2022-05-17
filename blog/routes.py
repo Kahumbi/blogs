@@ -1,20 +1,28 @@
 import os
+import json
+import requests
 import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from blog import app, db, bcrypt
-from blog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from blog.models import User, Post, Comment
+from blog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, CommentForm
+from blog.models import User, Post, Comment, Quote
 from flask_login import login_user, current_user, logout_user, login_required
 
 
-
+def get_quote():
+    quote_url = 'http://quotes.stormconsultancy.co.uk/random.json'
+    req = requests.get(quote_url)
+    data = json.loads(req.content)
+    quote = Quote(data["quote"],data["author"])
+    return quote
 
 @app.route("/")
 @app.route("/home")
 def home():
     posts = Post.query.all()
-    return render_template('home.html', posts=posts)
+    quote = get_quote()
+    return render_template('home.html', posts=posts, quote=quote)
 
 
 @app.route("/about")
@@ -139,6 +147,20 @@ def delete_post(post_id):
     db.session.commit()
     flash('post has been deleted', 'success')
     return redirect(url_for('home'))
+    
+    
+@app.route("/post/<int:post_id>/comment/new", methods=["POST","GET"])
+@login_required
+def create_comment(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(content=form.content.data,user_id=current_user.id, post_id=post.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Comment posted successfully!', 'success')
+        return redirect(url_for('post',post_id=post.id))
+    return render_template("create_comment.html", title="post a comment", form=form, legend="Post a comment")
     
     
     
