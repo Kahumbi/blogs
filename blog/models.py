@@ -45,9 +45,7 @@ class Comment(db.Model):
     
     
 class Quote:
-    """
-    Quote class to define Quote Object
-    """
+  
     def __init__(self,quote,author):
         self.quote = quote
         self.author = author
