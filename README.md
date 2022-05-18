@@ -54,7 +54,7 @@ Push changes made and click pull request so that I can access the changes made.
 * In your terminal:
 ​
         $ git clone https://github.com/kahumbi/blog.git
-        $ cd Pitch
+        $ cd Blog
 ​
 ## Running the Application
 * Creating the virtual environment
